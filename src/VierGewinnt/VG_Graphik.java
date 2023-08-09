@@ -166,7 +166,7 @@ public class VG_Graphik extends PApplet {
 
     //Wenn Bestmove-Button gedruckt wird
     public void bestmove() {
-        if(mouseY>=180 && mouseY<=240 && mouseX>=500 && mouseX<=690) {
+        if(!game.gameOver() && mouseY>=180 && mouseY<=240 && mouseX>=500 && mouseX<=690) {
             System.out.println("Best move");
             game = game.play(game.bestMove());
             System.out.println(game);
