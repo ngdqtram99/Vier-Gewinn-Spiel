@@ -5,10 +5,21 @@ Implementierung des Vier-Gewinn-Spiels in Java und Visualisierung mittels Proces
 
 Das Spiel Vier-Gewinnt ist ein Strategiespiel für zwei Personen. Dafür gibt es ein Gitter 7x6 (7 Spalten und 6 Reihen) und zwei-färbige Spielersteine. Die Spieler lassen abwechselnd sein Stein in eine freie Spalte fallen. Die freie Spalte ist die Spalte, die nicht voll mit 6 Steinen ist. Das Spiel beendet, wenn eine Person vier Steine in eine Linie (diagonal, vertikal oder horizontal) kriegt oder alle Spalten voll sind. Die Spielzüge laufen durch die Methode *play(Move… columns)*.
 
+![](image/newgame.png)
+
 Der beste Zug gibt die Spalte an, mit der der Spieler höchstwahrscheinlich gewinnen kann. Durch die **Negamax-** und **Monte-Carlo-Algorithmus** werden der Score für alle sieben Spalten bewertet. Welche, die das maximale Score hat, wird als den besten Zug gewählt. Dieser Schritt wird durch die Methoden *bestMove()*, *negamax(int depth)* und *monteCarlo_score()*
 durchgeführt.
 
+Beispiel für *bestMove()*:
+
+![](image/bestmove.png)
+
 Anschließend gibt es *undo()*-Methode, um die letzte Position in der *history*-Liste zurückzunehmen, und noch ein paar Hilfemethoden wie:
+
+Beispiel für *undo()*:
+
+![](image/zurück.png)
+
 - (static) *newGame()*: Erzeugt ein neues Spiel mit einer leeren *history*-Liste.
 - *nextMoveScore()*: Speichert die Scores der 7 Spalten, um den beste Score in der *bestScore()*-Methode zu suchen. 
 - *cango(int column)*: Prüft die Spalte, es voll ist. Wenn ja, gibt es falsch-Wert zurück. Die gewählte Spalte ist nicht akzeptiert.
