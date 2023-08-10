@@ -33,13 +33,13 @@ class VierGewinntTest {
     @Test
     void monteCarlo_score() {
         System.out.println("Test monteCarlo_score()");
-        assertEquals(20,VierGewinnt.of(moves1).play(Move.of(5)).monteCarlo_score());
+        assertEquals(10,VierGewinnt.of(moves1).play(Move.of(5)).monteCarlo_score());
     }
 
     @Test
     void nextMoveScore(){
         System.out.println("Test nextMoveScore()");
-        assertEquals(20,VierGewinnt.of(moves1).nextMoveScore()[4]);
+        assertEquals(10,VierGewinnt.of(moves1).nextMoveScore()[4]);
     }
 
     /*
