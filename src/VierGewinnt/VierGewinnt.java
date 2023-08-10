@@ -124,16 +124,37 @@ class VierGewinnt implements VierGewinntGame {
      */
     public int[] nextMoveScore() {
         int[] nextMove = new int[COLUMNS];
+        for (int i = 0; i < COLUMNS; i++) {
+            nextMove[i] = Integer.MIN_VALUE;
+        }
         VierGewinnt g = VierGewinnt.of(history);
 
         logger.info("Negamax Methode mit Scores, die durch Monte-Carlo Methode berechnet werden.");
         for(int col = 1; col <= COLUMNS; col++) {
             logger.info("Der Score der Spalte "+col+" :");
-            if(!g.cango(col-1)) nextMove[col-1] = -20;
-            else {
+            System.out.println("check"+g.grid);
+
+            if (!g.cango(col-1)) nextMove[col-1] = -20; // Die Spalte ist voll
+            else  {
                 g = g.play(Move.of(col));
-                nextMove[col - 1] = negamax(1);
-                g.undo();
+
+                // Wenn der Spieler gewonnen hat
+                if (g.gameOver()) {
+                    nextMove[col-1] = 10;
+                    g = g.undo();
+                    continue;
+                }
+
+                // Wenn der Spieler nicht blockiert und der Sieger 100 % Chance zum Gewinnen hat
+                for (int next_col = 1; next_col <= COLUMNS; next_col++) {
+                    g = g.play(Move.of(next_col));
+                    if (g.gameOver()) {
+                        nextMove[col - 1] = -15; g = g.undo(); break;
+                    }
+                    g = g.undo();
+                }
+                if (nextMove[col-1] == Integer.MIN_VALUE) nextMove[col - 1] = negamax(1);
+                g = g.undo();
             }
         }
         logger.info("Score Array "+ Arrays.toString(nextMove));
@@ -175,9 +196,9 @@ class VierGewinnt implements VierGewinntGame {
                 logger.info("In der Spalte "+c);
                 n = n.play(Move.of(c));
                 value = Math.max(value, -negamax(depth - 1));
-                n.undo();
+                n = n.undo();
             }
-            else if (n.cango(c-1)) return -18; ///////////////new line
+            else return -20;
         }
         logger.info("Tiefe "+depth+" ,Maximum = "+value);
         return value;
@@ -199,7 +220,7 @@ class VierGewinnt implements VierGewinntGame {
         }
 
         //Monte Carlo Methode
-        int exp = 100; //Anzahl der Experimente, die durchgeführt werden.
+        int exp = 400; //Anzahl der Experimente, die durchgeführt werden.
         int score = 0; //Anzahl der Gewinne oder Unentschieden
         while(exp-- > 0) {
             assert !g.gameOver() : "Das Game hat beendet, der Anfangszustand kommt nicht zurück.";
@@ -219,8 +240,8 @@ class VierGewinnt implements VierGewinntGame {
             while (count-- > 0) g = g.undo();
         }
 
-        score = (int) Math.round(score/10.);
-        assert score >= 0 && score <= 10: "Evaluierter Score passt nicht.";
+        score = (int) Math.round(score/20.) -10;
+        assert score >= -10 && score <= 10: "Evaluierter Score passt nicht.";
 
         return score;
     }
@@ -277,7 +298,7 @@ class VierGewinnt implements VierGewinntGame {
      * @param column Die gewählte Spalte
      * @return Die Spalte ist nicht voll oder nicht
      */
-    public boolean cango(int column) {return grid.get(column).size() < ROWS;}
+    public boolean cango(int column) {return grid.get(column).size() <= ROWS;}
 
     /**
      * löscht den letzten Zug
@@ -304,7 +325,3 @@ class VierGewinnt implements VierGewinntGame {
     }
 
 }
-
-/** Problem: Logik kann nicht erkennen, wenn der Spieler fast verliert. Weil
-    es immer den Gewinn als Verlieren bevorzugt. Erkennungsscore für Verloren-Fall ist nicht deutlich.
-*/
