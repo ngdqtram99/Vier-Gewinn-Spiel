@@ -132,7 +132,6 @@ class VierGewinnt implements VierGewinntGame {
         logger.info("Negamax Methode mit Scores, die durch Monte-Carlo Methode berechnet werden.");
         for(int col = 1; col <= COLUMNS; col++) {
             logger.info("Der Score der Spalte "+col+" :");
-            System.out.println("check"+g.grid);
 
             if (!g.cango(col-1)) nextMove[col-1] = -20; // Die Spalte ist voll
             else  {
@@ -147,11 +146,15 @@ class VierGewinnt implements VierGewinntGame {
 
                 // Wenn der Spieler nicht blockiert und der Sieger 100 % Chance zum Gewinnen hat
                 for (int next_col = 1; next_col <= COLUMNS; next_col++) {
-                    g = g.play(Move.of(next_col));
-                    if (g.gameOver()) {
-                        nextMove[col - 1] = -15; g = g.undo(); break;
+                    if (g.cango(next_col-1)) {
+                        g = g.play(Move.of(next_col));
+                        if (g.gameOver()) {
+                            nextMove[col - 1] = -15;
+                            g = g.undo();
+                            break;
+                        }
+                        g = g.undo();
                     }
-                    g = g.undo();
                 }
                 if (nextMove[col-1] == Integer.MIN_VALUE) nextMove[col - 1] = negamax(1);
                 g = g.undo();
@@ -198,7 +201,6 @@ class VierGewinnt implements VierGewinntGame {
                 value = Math.max(value, -negamax(depth - 1));
                 n = n.undo();
             }
-            else return -20;
         }
         logger.info("Tiefe "+depth+" ,Maximum = "+value);
         return value;
@@ -298,7 +300,7 @@ class VierGewinnt implements VierGewinntGame {
      * @param column Die gewählte Spalte
      * @return Die Spalte ist nicht voll oder nicht
      */
-    public boolean cango(int column) {return grid.get(column).size() <= ROWS;}
+    public boolean cango(int column) {return grid.get(column).size() < ROWS;}
 
     /**
      * löscht den letzten Zug
