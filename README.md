@@ -27,4 +27,13 @@ Es gibt besondere Fälle, wobei der Score anders gerechnet ist wie:
 - Der Stein wird an die Spalte geworfen, dabei der Gegner im nächsten Zug gewinnen kann: Score = -15
 
 ## Erklärung des Logging-Protokolls
-(Lesen Sie bitte README (PiS, SoSe2022).pdf)
+Lesen Sie bitte [README (PiS, SoSe2022).pdf](https://github.com/ngdqtram99/Vier-Gewinn-Spiel/blob/main/README%20(PiS%2C%20SoSe2022).pdf)
+
+## Libraries
+Processing [Version 3.5.4](https://processing.org/releases)
+
+## Tools
+Java [Java™ SE Development Kit 17.0.2 (JDK 17.0.2)](https://www.oracle.com/java/technologies/javase/17-0-2-relnotes.html)
+
+JUnit 5 [Version 5.7.0](https://junit.org/junit5/docs/5.7.0/release-notes/index.html)
+
